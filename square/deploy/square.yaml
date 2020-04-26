@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: square
+  labels:
+    app: square
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: square
+  template:
+    metadata:
+      labels:
+        app: square
+    spec:
+      containers:
+        - image: learncloudnative/square:0.1.0
+          imagePullPolicy: Always
+          name: square
+          ports:
+            - containerPort: 8080
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: square
+  labels:
+    app: square
+spec:
+  selector:
+    app: square
+  ports:
+    - port: 80
+      name: http
+      targetPort: 8080
+  type: LoadBalancer
